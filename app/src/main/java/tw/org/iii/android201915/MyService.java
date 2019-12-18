@@ -29,6 +29,12 @@ public class MyService extends Service {
         mediaPlayer = MediaPlayer.create(this, R.raw.ear);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
+        int len = mediaPlayer.getDuration();
+        Intent intent = new Intent("ACTION_BRAD");
+        intent.putExtra("len", len);
+        sendBroadcast(intent);
+
+
         timer.schedule(new MyTask(), 0, 500);
     }
 
