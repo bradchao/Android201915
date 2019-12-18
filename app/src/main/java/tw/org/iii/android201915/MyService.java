@@ -7,8 +7,12 @@ import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MyService extends Service {
     private MediaPlayer mediaPlayer;
+    private Timer timer;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -21,9 +25,11 @@ public class MyService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        timer = new Timer();
         mediaPlayer = MediaPlayer.create(this, R.raw.ear);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
+        timer.schedule(new MyTask(), 0, 500);
     }
 
     @Override
@@ -35,9 +41,24 @@ public class MyService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    private class MyTask extends TimerTask {
+        @Override
+        public void run() {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()){
+                int pos = mediaPlayer.getCurrentPosition();
+                Log.v("brad", "pos = " + pos);
+            }
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (timer != null){
+            timer.cancel();
+            timer.purge();
+            timer = null;
+        }
         mediaPlayer.release();
     }
 }
