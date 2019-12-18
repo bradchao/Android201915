@@ -35,7 +35,7 @@ public class MyService extends Service {
         sendBroadcast(intent);
 
 
-        timer.schedule(new MyTask(), 0, 500);
+        timer.schedule(new MyTask(), 0, 200);
     }
 
     @Override
@@ -56,7 +56,11 @@ public class MyService extends Service {
         public void run() {
             if (mediaPlayer != null && mediaPlayer.isPlaying()){
                 int pos = mediaPlayer.getCurrentPosition();
-                Log.v("brad", "pos = " + pos);
+                //Log.v("brad", "pos = " + pos);
+
+                Intent intent = new Intent("ACTION_BRAD");
+                intent.putExtra("pos", pos);
+                sendBroadcast(intent);
             }
         }
     }
