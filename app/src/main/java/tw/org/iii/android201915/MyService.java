@@ -4,15 +4,24 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MyService extends Service {
     private MediaPlayer mediaPlayer;
     private Timer timer;
+
+    private File musicDir;
+
+    public MyService(){
+        musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -26,7 +35,27 @@ public class MyService extends Service {
         super.onCreate();
 
         timer = new Timer();
-        mediaPlayer = MediaPlayer.create(this, R.raw.ear);
+
+        //mediaPlayer = MediaPlayer.create(this, R.raw.ear);
+
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(musicDir.getAbsolutePath() + "/brad.mp3");
+            mediaPlayer.prepare();
+
+//            mediaPlayer.prepareAsync();
+//            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                @Override
+//                public void onPrepared(MediaPlayer mp) {
+//                    //
+//                }
+//            });
+
+        }catch (Exception e){
+
+        }
+
+
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         int len = mediaPlayer.getDuration();
