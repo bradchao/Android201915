@@ -45,6 +45,11 @@ public class MyService extends Service {
             mediaPlayer.start();
         }else if (cmd.equals("pause") && mediaPlayer.isPlaying()){
             mediaPlayer.pause();
+        }else if (cmd.equals("seekto")){
+            int newpos = intent.getIntExtra("newpos", -1);
+            if (newpos >= 0){
+                mediaPlayer.seekTo(newpos);
+            }
         }
 
 
